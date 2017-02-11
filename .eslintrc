@@ -16,6 +16,21 @@
         ] 
       }
     ],
+    "key-spacing": [
+      2, 
+      {
+        "align": "value"
+      }
+    ],
+    "no-multi-spaces": [
+      2, 
+      { 
+        "exceptions": {
+          "VariableDeclarator": true, 
+          "ImportDeclaration": true, 
+        }
+      }
+    ], 
     "react/no-multi-comp": 0,
     "import/default": 0,
     "import/no-duplicates": 0,
