@@ -15,24 +15,55 @@ const PATHS = {
 };
 
 const plugins = [
+  new webpack.LoaderOptionsPlugin({
+    options: {
+      devSever: {
+        devtool:            'eval-source-map',
+        contentBase:        PATHS.build,
+        historyApiFallback: true,
+        progress:           true,
+        stats:              'errors-only',
+      },
+    },
+    debug: !production,
+  }),
   new CleanPlugin('build'),
+  // Encountered problems using this w/ dev server
+  // https://github.com/zeit/now-cli/issues/167
+  // https://github.com/zeit/now-cli/issues/160
+  // https://github.com/facebookincubator/create-react-app/issues/1185
+  // Couldn't get suggested fix to work so switching to file loader for simplicity
   new HtmlWebpackPlugin({
-    template: PATHS.template,
-    inject:   true,
+    template: 'index.html',
+    // template: PATHS.template,
+    // inject:   true,
   }),
 ];
 
 const rules = [
   {
-    test:    /\.js$/,
+    test:    /\.jsx?$/,
     exclude: /(node_modules)/,
-    loader:  'babel-loader',
+
+    use: [
+      {
+        loader: 'babel-loader',
+      },
+      {
+        options: {
+          failOnError:   true,
+          failOnWarning: true,
+          emitError:     true,
+          emitWarning:   true,
+        },
+        loader: 'eslint-loader',
+      },
+    ],
   },
 ];
 
 const config = {
-  context: PATHS.context,
-  entry:   {
+  entry: {
     vendor: [
       'react',
       'react-dom',
@@ -46,6 +77,12 @@ const config = {
   module: {
     rules,
   },
+  stats: {
+    reasons:      true,
+    errorDetails: true,
+  },
+  devtool: 'inline-source-map',
+  context: PATHS.context,
   plugins,
 };
 
