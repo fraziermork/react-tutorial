@@ -2,6 +2,7 @@
 const path              = require('path');
 const webpack           = require('webpack');
 const CleanPlugin       = require('clean-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 // env variables
 const production = process.env.NODE_ENV === 'production';
@@ -14,6 +15,9 @@ const PATHS = {
 };
 
 const plugins = [
+  new HtmlWebpackPlugin({
+    template: PATHS.template,
+  }),
   new webpack.LoaderOptionsPlugin({
     options: {
       devSever: {
